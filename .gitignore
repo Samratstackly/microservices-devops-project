@@ -1,0 +1,17 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!example.tfvars
+crash.log
+crash.*.log
+*.pem
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Other
+.DS_Store
+*.log
