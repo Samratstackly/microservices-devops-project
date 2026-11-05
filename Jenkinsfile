@@ -4,8 +4,8 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION = 'eu-north-1'
-        AWS_ACCOUNT_ID = '354089337307'
+        AWS_REGION = 'ap-south-1'
+        AWS_ACCOUNT_ID = '297155700990'
 
         ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
 
@@ -29,8 +29,7 @@ pipeline {
         stage('GitHub Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/Samratstackly/microservices-devops-project.git
-'
+                    url: 'https://github.com/Samratstackly/microservices-devops-project.git'
             }
         }
 
