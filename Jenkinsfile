@@ -4,7 +4,7 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION = 'ap-south-1'
+        AWS_REGION = 'eu-north-1'
         AWS_ACCOUNT_ID = '354089337307'
 
         ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
@@ -13,7 +13,7 @@ pipeline {
         PRODUCT_IMAGE = 'microservices-devops-product-service'
         ORDER_IMAGE = 'microservices-devops-order-service'
 
-        EC2_HOST = '15.207.102.209'
+        EC2_HOST = '16.16.79.48'
         EC2_USER = 'ubuntu'
 
         DEPLOY_DIR = '/home/ubuntu/microservices-devops-project'
@@ -29,7 +29,8 @@ pipeline {
         stage('GitHub Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/lokeshsomasundaram/microservices-devops-project.git'
+                    url: 'https://github.com/Samratstackly/microservices-devops-project.git
+'
             }
         }
 
