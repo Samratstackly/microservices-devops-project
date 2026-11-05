@@ -13,7 +13,7 @@ pipeline {
         PRODUCT_IMAGE = 'microservices-devops-product-service'
         ORDER_IMAGE = 'microservices-devops-order-service'
 
-        EC2_HOST = 'YOUR_EC2_PUBLIC_IP'
+        EC2_HOST = '15.207.102.209'
         EC2_USER = 'ubuntu'
 
         DEPLOY_DIR = '/home/ubuntu/microservices-devops-project'
