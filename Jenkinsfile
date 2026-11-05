@@ -9,9 +9,9 @@ pipeline {
 
         ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
 
-        USER_IMAGE = 'user-service'
-        PRODUCT_IMAGE = 'product-service'
-        ORDER_IMAGE = 'order-service'
+        USER_IMAGE = 'microservices-devops-user-service'
+        PRODUCT_IMAGE = 'microservices-devops-product-service'
+        ORDER_IMAGE = 'microservices-devops-order-service'
 
         EC2_HOST = 'YOUR_EC2_PUBLIC_IP'
         EC2_USER = 'ubuntu'
