@@ -1,3 +1,4 @@
+
 pipeline {
 
     agent any
@@ -57,9 +58,7 @@ pipeline {
                     set -e
 
                     docker build -t user-service:${BUILD_NUMBER} ./user-service
-
                     docker build -t product-service:${BUILD_NUMBER} ./product-service
-
                     docker build -t order-service:${BUILD_NUMBER} ./order-service
                 '''
             }
@@ -84,20 +83,17 @@ pipeline {
 
         stage('Login to Amazon ECR') {
             steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-cred'
-                ]]) {
-                    sh '''
-                        set -e
+                sh '''
+                    set -e
 
-                        aws ecr get-login-password \
-                        --region ${AWS_REGION} | \
-                        docker login \
-                        --username AWS \
-                        --password-stdin ${ECR_REGISTRY}
-                    '''
-                }
+                    aws sts get-caller-identity
+
+                    aws ecr get-login-password \
+                    --region ${AWS_REGION} | \
+                    docker login \
+                    --username AWS \
+                    --password-stdin ${ECR_REGISTRY}
+                '''
             }
         }
 
@@ -107,9 +103,7 @@ pipeline {
                     set -e
 
                     docker push ${ECR_REGISTRY}/${USER_IMAGE}:${BUILD_NUMBER}
-
                     docker push ${ECR_REGISTRY}/${PRODUCT_IMAGE}:${BUILD_NUMBER}
-
                     docker push ${ECR_REGISTRY}/${ORDER_IMAGE}:${BUILD_NUMBER}
                 '''
             }
@@ -123,12 +117,24 @@ pipeline {
 
                         ssh -o StrictHostKeyChecking=accept-new \
                         ${EC2_USER}@${EC2_HOST} \
-                        "cd ${DEPLOY_DIR} && \
-                        export IMAGE_TAG=${BUILD_NUMBER} && \
-                        export AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID} && \
-                        export AWS_REGION=${AWS_REGION} && \
-                        docker compose pull && \
-                        docker compose up -d"
+                        "
+                        set -e
+
+                        cd ${DEPLOY_DIR}
+
+                        aws ecr get-login-password \
+                        --region ${AWS_REGION} | \
+                        docker login \
+                        --username AWS \
+                        --password-stdin ${ECR_REGISTRY}
+
+                        export IMAGE_TAG=${BUILD_NUMBER}
+                        export AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}
+                        export AWS_REGION=${AWS_REGION}
+
+                        docker compose pull
+                        docker compose up -d
+                        "
                     '''
                 }
             }
@@ -142,8 +148,7 @@ pipeline {
 
                         ssh -o StrictHostKeyChecking=accept-new \
                         ${EC2_USER}@${EC2_HOST} \
-                        "cd ${DEPLOY_DIR} && \
-                        docker compose ps"
+                        "cd ${DEPLOY_DIR} && docker compose ps"
                     '''
                 }
             }
